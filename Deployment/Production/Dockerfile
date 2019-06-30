@@ -5,4 +5,5 @@ WORKDIR app
 COPY requirements.txt .
 RUN pip install -r requirements.txt && pip install gunicorn
 COPY . .
-CMD 'bash -c "python manage.py migrate --noinput && gunicorn EverythingFlutter.wsgi -b 0.0.0.0:8000"'
+ENTRYPOINT ['./Deployment/Production/docker-entrypoint.sh']
+CMD ['gunicorn', 'EverythingFlutter.wsgi', '-b', '0.0.0.0:8000']
