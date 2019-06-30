@@ -6,6 +6,8 @@ import sys
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'EverythingFlutter.settings')
+    if not os.path.isdir('EverythingFlutter/static'):
+        os.mkdir('EverythingFlutter/static')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
