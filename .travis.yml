@@ -1,4 +1,5 @@
 dist: xenial
+language: python
 sudo: required
 services:
   - docker
@@ -18,13 +19,13 @@ jobs:
   include:
     - stage: "Build the Container"
       script: docker build -f Deployment/Production/Dockerfile -t $IMAGE_NAME:latest .
-    - script: docker tag $IMAGE_NAME $IMAGE_NAME:commit-TRAVIS_COMMIT
+    - script: docker tag $IMAGE_NAME $IMAGE_NAME:commit-$TRAVIS_COMMIT
     - script: docker tag $IMAGE_NAME $IMAGE_NAME:production
     - stage: "Pushing to Docker Registry"
       script: docker push $IMAGE_NAME
     - stage: "Deploying to the Cluster"
       deploy:
         provider: script
-        script: kubectl set image deployment $DEPLOYMENT_NAME $IMAGE_NAME:commit-TRAVIS_COMMIT
+        script: kubectl set image deployment $DEPLOYMENT_NAME $IMAGE_NAME:commit-$TRAVIS_COMMIT
         on:
           branch: master
