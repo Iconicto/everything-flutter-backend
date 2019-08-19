@@ -21,7 +21,7 @@ jobs:
     - stage: "Build the Container"
       script: ./Deployment/Production/build.sh
     - stage: "Pushing to Docker Registry"
-      script: docker push $IMAGE_NAME
+      script: docker push $IMAGE_NAME:latest
     - stage: "Deploying to the Cluster"
       deploy:
         provider: script
