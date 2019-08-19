@@ -16,15 +16,14 @@ before_install:
   - doctl k8s cluster kubeconfig save $DIGITALOCEAN_CLUSTER -t $DIGITALOCEAN_TOKEN
   - echo $DOCKER_PASSWORD | docker login registry.iconicto.com -u $DOCKER_USERNAME --password-stdin
 
-jobs:
-  include:
-    - stage: "Build the Container"
-      script: ./Deployment/Production/build.sh
-    - stage: "Pushing to Docker Registry"
-      script: docker push $IMAGE_NAME:latest
-    - stage: "Deploying to the Cluster"
-      deploy:
-        provider: script
-        script: kubectl set image deployment $DEPLOYMENT_NAME $IMAGE_NAME:commit-$TRAVIS_COMMIT
-        on:
-          branch: master
+script:
+  - docker build -f Deployment/Production/Dockerfile -t $IMAGE_NAME .
+  - docker tag $IMAGE_NAME $IMAGE_NAME:commit-$TRAVIS_COMMIT
+  - docker tag $IMAGE_NAME $IMAGE_NAME:production
+  - docker push $IMAGE_NAME
+
+deploy:
+  provider: script
+  script: kubectl set image deployment $DEPLOYMENT_NAME $IMAGE_NAME:commit-$TRAVIS_COMMIT
+  on:
+    branch: master
