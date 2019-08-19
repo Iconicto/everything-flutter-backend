@@ -1,4 +1,4 @@
-language: python
+dist: xenial
 sudo: required
 services:
   - docker
@@ -11,7 +11,6 @@ before_install:
   - sudo mv ./kubectl /usr/local/bin/kubectl
   - sudo snap install doctl
   - sudo snap connect doctl:kube-config
-  - sudo mv ./doctl /usr/local/bin
   - doctl k8s cluster kubeconfig save $DIGITALOCEAN_CLUSTER -t $DIGITALOCEAN_TOKEN
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
