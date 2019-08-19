@@ -27,4 +27,4 @@ jobs:
         provider: script
         script: kubectl set image deployment $DEPLOYMENT_NAME $IMAGE_NAME:commit-TRAVIS_COMMIT
         on:
-          branch: develop
+          branch: master
