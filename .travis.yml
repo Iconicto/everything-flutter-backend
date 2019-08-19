@@ -7,26 +7,19 @@ env:
     - IMAGE_NAME=registry.iconicto.com/EveryThingFlutterBackend
 before_install:
   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-  - chmod +x ./kubectl
-  - mv ./kubectl /usr/local/bin/kubectl
+  - sudo chmod +x ./kubectl
+  - sudo mv ./kubectl /usr/local/bin/kubectl
   - curl -s https://api.github.com/repos/digitalocean/doctl/releases/latest | grep tag_name | cut -d '"' -f 4 | cut -c2- | read DOCTL_VERSION
   - curl -sL https://github.com/digitalocean/doctl/releases/download/v$DOCTL_VERSION/doctl-$DOCTL_VERSION-linux-amd64.tar.gz | tar -xzv
   - sudo mv ~/doctl /usr/local/bin
   - doctl k8s cluster kubeconfig save $DIGITALOCEAN_CLUSTER -t DIGITALOCEAN_TOKEN
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-script:
-  - docker build -f Deployment/Production/Dockerfile -t $IMAGE_NAME .
-  - docker tag $IMAGE_NAME $IMAGE_NAME:commit-TRAVIS_COMMIT
-  - docker tag $IMAGE_NAME $IMAGE_NAME:production
-  - docker push $IMAGE_NAME
-
 jobs:
   include:
     - stage: "Build the Container"
       script: docker build -f Deployment/Production/Dockerfile -t $IMAGE_NAME .
-    - script: docker tag $IMAGE_NAME $IMAGE_NAME:commit-TRAVIS_COMMIT
-    - script: docker tag $IMAGE_NAME $IMAGE_NAME:production
+    - script: docker tag $IMAGE_NAME $IMAGE_NAME:commit-TRAVIS_COMMIT && docker tag $IMAGE_NAME $IMAGE_NAME:production
     - stage: "Pushing to Docker Registry"
       script: docker push $IMAGE_NAME
     - stage: "Deploying to the Cluster"
