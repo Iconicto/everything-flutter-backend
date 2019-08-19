@@ -10,7 +10,9 @@ before_install:
   - sudo chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
   - export DOCTL_VERSION=$(curl -s https://api.github.com/repos/digitalocean/doctl/releases/latest | grep tag_name | cut -d '"' -f 4 | cut -c2-)
-  - curl -sL https://github.com/digitalocean/doctl/releases/download/v$DOCTL_VERSION/doctl-$DOCTL_VERSION-linux-amd64.tar.gz | tar -xzv
+  - curl -OL https://github.com/digitalocean/doctl/releases/download/v$DOCTL_VERSION/doctl-$DOCTL_VERSION-linux-amd64.tar.gz
+  - ls
+  - tar xf ./doctl-$DOCTL_VERSION-linux-amd64.tar.gz
   - sudo mv ./doctl /usr/local/bin
   - doctl k8s cluster kubeconfig save $DIGITALOCEAN_CLUSTER -t DIGITALOCEAN_TOKEN
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
