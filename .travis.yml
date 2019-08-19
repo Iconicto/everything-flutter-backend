@@ -10,6 +10,7 @@ before_install:
   - sudo chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
   - export DOCTL_VERSION=$(curl -s https://api.github.com/repos/digitalocean/doctl/releases/latest | grep tag_name | cut -d '"' -f 4 | cut -c2-)
+  - echo $DOCTL_VERSION
   - curl -OL https://github.com/digitalocean/doctl/releases/download/v$DOCTL_VERSION/doctl-$DOCTL_VERSION-linux-amd64.tar.gz
   - ls
   - tar xf ./doctl-$DOCTL_VERSION-linux-amd64.tar.gz
