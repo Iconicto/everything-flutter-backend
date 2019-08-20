@@ -5,7 +5,7 @@ services:
   - docker
 env:
   global:
-    - IMAGE_NAME=registry.iconicto.com/everything-flutter-backend
+    - IMAGE_NAME=registry.iconicto.com/everything-flutter/backend
 before_install:
   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
   - sudo chmod +x ./kubectl
@@ -23,6 +23,6 @@ script:
 
 deploy:
   provider: script
-  script: kubectl set image deployment $DEPLOYMENT_NAME $IMAGE_NAME:commit-$TRAVIS_COMMIT
+  script: kubectl set image deployment $DEPLOYMENT_NAME everything-flutter-backend=$IMAGE_NAME:commit-$TRAVIS_COMMIT
   on:
     branch: master
