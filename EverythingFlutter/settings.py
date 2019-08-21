@@ -82,7 +82,7 @@ if os.getenv('PGPASSWORD'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'postgres',
+            'NAME': os.getenv('PGNAME'),
             'USER': os.getenv('PGUSER'),
             'HOST': os.getenv('PGHOST'),
             'PASSWORD': os.getenv('PGPASSWORD'),

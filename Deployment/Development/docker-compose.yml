@@ -24,6 +24,7 @@ services:
       AWS_DEFAULT_ACL: ${AWS_DEFAULT_ACL}
       S3_ENDPOINT_URL: ${S3_ENDPOINT_URL}
       CDN: ${CDN}
+      PGNAME: ${PGNAME}
     volumes:
       - ../../:/app
     ports:
