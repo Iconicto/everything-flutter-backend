@@ -144,7 +144,7 @@ if os.getenv('AWS_ACCESS_KEY_ID'):
     AWS_S3_USE_SSL = True
     AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL').strip()
 
-    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_ENDPOINT_URL').strip()
+    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN').strip()
     STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
     DEFAULT_FILE_STORAGE = 'EverythingFlutter.storage_backends.MediaStorage'
