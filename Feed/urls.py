@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import serializers
 from django.urls import path
-from .models import Community, Widget, Tutorial, Source, Event
+from .models import Community, Widget, Tutorial, News, Event
 
 
 class CommunitySerializer(serializers.Serializer):
@@ -77,9 +77,9 @@ class NewsSerializer(serializers.Serializer):
 
 class NewsView(APIView):
     def get(self, request):
-        news = Event.objects.all()
+        news = News.objects.all()
         serializer = WidgetSerializer(news, many=True)
-        return Response({"events": serializer.data})
+        return Response({"news": serializer.data})
 
 
 urlpatterns = [
