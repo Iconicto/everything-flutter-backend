@@ -87,5 +87,5 @@ urlpatterns = [
     path('widgets/', WidgetView.as_view()),
     path('tutorials/', TutorialView.as_view()),
     path('events/', EventView.as_view()),
-    # path('news/', NewsView.as_view()),
+    path('news/', NewsView.as_view()),
 ]
