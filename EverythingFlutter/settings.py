@@ -137,6 +137,7 @@ if os.getenv('S3_ACCESS_KEY_ID'):
     AWS_SECRET_ACCESS_KEY = os.getenv('S3_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('S3_STORAGE_BUCKET_NAME')
     AWS_S3_ENDPOINT_URL = os.getenv('S3_ENDPOINT_URL')
+    AWS_S3_REGION_NAME = os.getenv('S3_REGION_NAME')
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
