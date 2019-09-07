@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import serializers
 from django.urls import path
-from .models import Community, Widget, Tutorial, News, Event
+from .models import Community, Widget, Tutorial, News, Event, Source
 
 
 class CommunitySerializer(serializers.Serializer):
@@ -17,6 +17,18 @@ class CommunityView(APIView):
         communities = Community.objects.all()
         serializer = CommunitySerializer(communities, many=True)
         return Response({"communities": serializer.data})
+
+
+class SourceSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=150)
+    logo = serializers.ImageField()
+
+
+class SourceView(APIView):
+    def get(self, request):
+        source = Source.objects.all()
+        serializer = SourceSerializer(source, many=True)
+        return Response({"sources": serializer.data})
 
 
 class WidgetSerializer(serializers.Serializer):
@@ -38,13 +50,13 @@ class TutorialSerializer(serializers.Serializer):
     author = serializers.CharField(max_length=200)
     published_date = serializers.DateField()
     link = serializers.URLField()
-    source = serializers.StringRelatedField(many=True)
+    source = SourceSerializer()
 
 
 class TutorialView(APIView):
     def get(self, request):
         tutorials = Tutorial.objects.all()
-        serializer = WidgetSerializer(tutorials, many=True)
+        serializer = TutorialSerializer(tutorials, many=True)
         return Response({"tutorials": serializer.data})
 
 
@@ -62,7 +74,7 @@ class EventSerializer(serializers.Serializer):
 class EventView(APIView):
     def get(self, request):
         events = Event.objects.all()
-        serializer = WidgetSerializer(events, many=True)
+        serializer = EventSerializer(events, many=True)
         return Response({"events": serializer.data})
 
 
@@ -70,15 +82,14 @@ class NewsSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=350)
     time = serializers.DateTimeField()
     link = serializers.URLField()
-    source = serializers.StringRelatedField(many=True)
-    # source = serializers.PrimaryKeyRelatedField(queryset=Source.objects.all(), read_only=True)
+    source = SourceSerializer()
     image = serializers.ImageField()
 
 
 class NewsView(APIView):
     def get(self, request):
         news = News.objects.all()
-        serializer = WidgetSerializer(news, many=True)
+        serializer = NewsSerializer(news, many=True)
         return Response({"news": serializer.data})
 
 
@@ -88,4 +99,5 @@ urlpatterns = [
     path('tutorials/', TutorialView.as_view()),
     path('events/', EventView.as_view()),
     path('news/', NewsView.as_view()),
+    path('source/', SourceView.as_view()),
 ]
