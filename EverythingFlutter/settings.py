@@ -36,10 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Feed',
-    'graphene_django',
     'storages',
     'corsheaders',
     'django_filters',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +82,7 @@ if os.getenv('PGPASSWORD'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'postgres',
+            'NAME': os.getenv('PGNAME'),
             'USER': os.getenv('PGUSER'),
             'HOST': os.getenv('PGHOST'),
             'PASSWORD': os.getenv('PGPASSWORD'),
@@ -128,31 +128,30 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'EverythingFlutter/static'),
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-if os.getenv('S3_ACCESS_KEY_ID'):
-    AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL')
-    AWS_ACCESS_KEY_ID = os.getenv('S3_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('S3_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('S3_STORAGE_BUCKET_NAME')
-    AWS_S3_ENDPOINT_URL = os.getenv('S3_ENDPOINT_URL')
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
+if os.getenv('AWS_ACCESS_KEY_ID'):
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID').strip()
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY').strip()
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME').strip()
+    AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL').strip()
     AWS_LOCATION = 'EverythingFlutter'
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME').strip()
+    AWS_S3_USE_SSL = True
+    AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL').strip()
+
+    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN').strip()
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
     DEFAULT_FILE_STORAGE = 'EverythingFlutter.storage_backends.MediaStorage'
-
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'EverythingFlutter/static'),
-    ]
-    AWS_S3_CUSTOM_DOMAIN = os.getenv('CDN')
-    STATIC_URL = 'https://%s/%s/' % (os.getenv('CDN'), AWS_LOCATION)
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-    GRAPHENE = {
-        'SCHEMA': 'EverythingFlutter.schema.schema',
-    }
-
 else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATIC_URL = '/static/'
+    if not os.path.isdir(STATIC_ROOT):
+        os.makedirs(STATIC_ROOT)

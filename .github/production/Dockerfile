@@ -5,5 +5,5 @@ WORKDIR app
 COPY requirements.txt .
 RUN pip install -r requirements.txt && pip install gunicorn
 COPY . .
-RUN ["chmod", "+x", "/app/Deployment/Production/docker-entrypoint.sh"]
-CMD '/app/Deployment/Production/docker-entrypoint.sh'
+RUN ["chmod", "+x", "/app/.github/production/docker-entrypoint.sh"]
+CMD '/app/.github/production/docker-entrypoint.sh'
